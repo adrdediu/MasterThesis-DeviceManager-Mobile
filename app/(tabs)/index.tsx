@@ -18,6 +18,19 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [theme, setTheme] = useState('light');
+  const [serverResponse, setServerResponse] = useState({ http: null, https: null });
+  const [debugMode, setDebugMode] = useState(false);
+
+  const DebugInfo = () => (
+    <View style={styles.debugContainer}>
+      <Text style={styles.debugText}>Server IP: {serverIP}</Text>
+      <Text style={styles.debugText}>Connection Status: {error ? 'Error' : 'OK'}</Text>
+      <Text style={styles.debugText}>Last Error: {error}</Text>
+      <Text style={styles.debugText}>Theme: {theme}</Text>
+      <Text style={styles.debugText}>HTTP Response: {JSON.stringify(serverResponse.http, null, 2)}</Text>
+      <Text style={styles.debugText}>HTTPS Response: {JSON.stringify(serverResponse.https, null, 2)}</Text>
+    </View>
+  );
 
   useEffect(() => {
     const loadTheme = async () => {
@@ -51,20 +64,30 @@ export default function App() {
 
   const validateServer = async (ip) => {
     try {
-      const response = await fetch(`http://${ip}`, {
-		  credentials: 'include',
-		  headers: {
-			'Content-Type': 'application/json'
-		  }
-	  });
-	  const responseSecure = await fetch(`https://${ip}`,{
-		  credentials: 'include',
-		  headers: {
-			'Content-Type': 'application/json'
-		  }
-	  });
+      console.log(`Attempting HTTP connection to: https://${ip}`);
+      const response = await fetch(`https://${ip}`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const httpData = await response.text();
+      setServerResponse(prev => ({ ...prev, http: { status: response.status, data: httpData } }));
+  
+      console.log(`Attempting HTTPS connection to: https://${ip}`);
+      const responseSecure = await fetch(`https://${ip}`,{
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const httpsData = await responseSecure.text();
+      setServerResponse(prev => ({ ...prev, https: { status: responseSecure.status, data: httpsData } }));
+  
       return response.ok || responseSecure.ok;
-    } catch {
+    } catch (error) {
+      console.error('Connection error:', error);
+      setServerResponse(prev => ({ ...prev, error: error.message }));
       return false;
     }
   };
@@ -138,7 +161,15 @@ export default function App() {
                 buttonStyle={styles.button}
                 titleStyle={styles.buttonText}
               />
+              <Button
+                title="Debug Info"
+                onPress={() => setDebugMode(!debugMode)}
+                type="outline"
+                buttonStyle={styles.debugButton}
+                titleStyle={styles.debugButtonText}
+              />
             </Card>
+            {debugMode && <DebugInfo />}
           </View>
         ) : (
           <WebView url={`https://${serverIP}`} />
@@ -207,5 +238,23 @@ const styles = StyleSheet.create({
   },
   webview: {
     flex: 1,
+  },
+  debugContainer: {
+    marginTop: 15,
+    padding: 10,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 5,
+  },
+  debugText: {
+    fontSize: 12,
+    marginVertical: 2,
+    fontFamily: 'monospace',
+  },
+  debugButton: {
+    marginTop: 10,
+    borderColor: '#6c757d',
+  },
+  debugButtonText: {
+    color: '#6c757d',
   }
 });
