@@ -4,7 +4,7 @@
     "slug": "DeviceManagerApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/icons/device_manager.png/",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,10 +13,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/device_manager.png/",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.DeviceManagerApp"
+      "package": "com.anonymous.DeviceManagerApp",
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
       "bundler": "metro",

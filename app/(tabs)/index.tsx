@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Update the imports at the top
 import WebView from '../../components/WebView';
+import { Platform } from 'react-native';
 import { Image } from '@rneui/base';
 import { Input, Button, Text, Card, ThemeProvider, Icon } from '@rneui/themed';
 
@@ -64,33 +65,56 @@ export default function App() {
 
   const validateServer = async (ip) => {
     try {
-      console.log(`Attempting HTTP connection to: https://${ip}`);
-      const response = await fetch(`https://${ip}`, {
+      // First try HTTP
+      console.log(`Testing connection to: http://${ip}`);
+      const httpResponse = await fetch(`http://${ip}`, {
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
+        },
+        timeout: 5000
       });
-      const httpData = await response.text();
-      setServerResponse(prev => ({ ...prev, http: { status: response.status, data: httpData } }));
+      
+      const httpData = {
+        status: httpResponse.status,
+        headers: Object.fromEntries(httpResponse.headers.entries()),
+        data: await httpResponse.text()
+      };
+      
+      setServerResponse(prev => ({
+        ...prev,
+        http: httpData,
+        lastAttempt: new Date().toISOString()
+      }));
   
-      console.log(`Attempting HTTPS connection to: https://${ip}`);
-      const responseSecure = await fetch(`https://${ip}`,{
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const httpsData = await responseSecure.text();
-      setServerResponse(prev => ({ ...prev, https: { status: responseSecure.status, data: httpsData } }));
+      return httpResponse.ok;
   
-      return response.ok || responseSecure.ok;
     } catch (error) {
-      console.error('Connection error:', error);
-      setServerResponse(prev => ({ ...prev, error: error.message }));
+      const errorDetails = {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      };
+      
+      setServerResponse(prev => ({
+        ...prev,
+        error: errorDetails,
+        lastError: new Date().toISOString()
+      }));
+      
+      console.log('Connection Details:', {
+        ip,
+        error: errorDetails,
+        devicePlatform: Platform.OS,
+        deviceVersion: Platform.Version
+      });
+      
       return false;
     }
   };
+  
 
   const handleIPSubmit = async () => {
     setIsLoading(true);

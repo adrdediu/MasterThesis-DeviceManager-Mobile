@@ -3,18 +3,20 @@
     "version": ">= 13.4.2",
     "appVersionSource": "remote"
   },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+    "build": {
+      "preview": {
+        "android": {
+          "cache": {
+            "key": "gradle-cache-v1",
+            "paths": [
+              "~/.gradle/caches",
+              "~/.gradle/wrapper"
+            ]
+          },
+          "gradleCommand": ":app:assembleRelease"
+        }
+      }
     },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {
-      "autoIncrement": true
-    }
-  },
   "submit": {
     "production": {}
   }
