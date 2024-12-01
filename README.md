@@ -1,50 +1,48 @@
-# Welcome to your Expo app 👋
+# Device Manager Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mobile companion app for the Device Manager system, providing seamless access to device management features on Android devices.
 
-## Get started
+## Overview
 
-1. Install dependencies
+The Device Manager Mobile App extends the functionality of the [Device Manager System](https://github.com/adrdediu/MasterThesis-Django-DeviceManager) to mobile devices, offering a responsive and secure interface for managing devices and assets on the go.
 
-   ```bash
-   npm install
-   ```
+## Key Features
 
-2. Start the app
+- **Server Connection**: Secure connection to Device Manager server using TLS 1.3
+- **Theme Synchronization**: Automatic dark/light mode sync with server preferences
+- **Persistent Settings**: Saves server connection details for quick access
+- **Bootstrap 5 UI**: Modern, responsive interface matching the web application
+- **WebView Integration**: Seamless access to Device Manager features
 
-   ```bash
-    npx expo start
-   ```
+## System Requirements
 
-In the output, you'll find options to open the app in a
+- Android device
+- Internet connection
+- Access to Device Manager server
+- Valid user credentials
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Security
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- TLS 1.3 encryption with self-signed certificates
+- Secure connection handling
+- Local storage encryption for sensitive data
+- Session management
 
-## Get a fresh project
+## Getting Started
 
-When you're ready, run:
+1. Install the app on your Android device
+2. Enter the Device Manager server IP address
+3. Log in with your credentials
+4. Access all Device Manager features through the mobile interface
 
-```bash
-npm run reset-project
-```
+## Development
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Built with:
+- React Native
+- Expo
+- Bootstrap 5
+- TypeScript
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+© 2024 Device Manager Mobile. All rights reserved.
